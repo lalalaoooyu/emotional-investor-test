@@ -1,17 +1,26 @@
-import { useState, useEffect } from "react"
+import { useState, useMemo } from "react"
 import IntroPage from "./components/IntroPage"
 import QuestionPage from "./components/QuestionPage"
 import ResultPage from "./components/ResultPage"
 import { questions } from "./data/questions"
-import type { Option } from "./data/questions"
+import { questionsEn } from "./data/questions-en"
+import { questionsJa } from "./data/questions-ja"
 import { resultProfiles } from "./data/results"
+import { resultProfilesEn } from "./data/results-en"
+import { resultProfilesJa } from "./data/results-ja"
+import { i18n, langLabels } from "./data/i18n"
+import type { Lang } from "./data/i18n"
+import type { Option, Question } from "./data/questions"
 
 type Stage = "intro" | "test" | "result"
 
-function getInitialTheme(): "light" | "dark" {
-  const saved = localStorage.getItem("theme")
-  if (saved === "light" || saved === "dark") return saved
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+function getInitialLang(): Lang {
+  const saved = localStorage.getItem("lang")
+  if (saved === "zh" || saved === "en" || saved === "ja") return saved
+  const nav = navigator.language.toLowerCase()
+  if (nav.startsWith("ja")) return "ja"
+  if (nav.startsWith("zh")) return "zh"
+  return "en"
 }
 
 export default function App() {
@@ -21,12 +30,33 @@ export default function App() {
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [resultType, setResultType] = useState<string | null>(null)
   const [fadeClass, setFadeClass] = useState("opacity-100 translate-y-0")
-  const [theme, setTheme] = useState<"light" | "dark">(getInitialTheme)
+  const [lang, setLang] = useState<Lang>(getInitialLang)
 
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme)
-    localStorage.setItem("theme", theme)
-  }, [theme])
+  const t = i18n[lang]
+
+  const localizedQuestions: Question[] = useMemo(() => {
+    const localized = lang === "en" ? questionsEn : lang === "ja" ? questionsJa : null
+    if (!localized) return questions
+    return questions.map((q, i) => ({
+      ...q,
+      ...localized[i],
+    }))
+  }, [lang])
+
+  const localizedResults = useMemo(() => {
+    const localized = lang === "en" ? resultProfilesEn : lang === "ja" ? resultProfilesJa : null
+    if (!localized) return resultProfiles
+    const merged: typeof resultProfiles = {} as typeof resultProfiles
+    for (const key of Object.keys(resultProfiles)) {
+      merged[key] = { ...resultProfiles[key], ...localized[key] }
+    }
+    return merged
+  }, [lang])
+
+  const handleLangChange = (newLang: Lang) => {
+    setLang(newLang)
+    localStorage.setItem("lang", newLang)
+  }
 
   const transition = (callback: () => void) => {
     setFadeClass("opacity-0 translate-y-3")
@@ -52,7 +82,7 @@ export default function App() {
     setScores(newScores)
     setSelectedTags([...selectedTags, option.tag])
 
-    if (currentQ < questions.length - 1) {
+    if (currentQ < localizedQuestions.length - 1) {
       transition(() => setCurrentQ(currentQ + 1))
     } else {
       transition(() => {
@@ -83,48 +113,43 @@ export default function App() {
     })
   }
 
+  const langs: Lang[] = ["zh", "en", "ja"]
+
   return (
     <div className="relative min-h-screen">
-      {/* Theme toggle */}
-      <button
-        onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-        className="fixed top-4 right-4 z-50 flex h-8 w-8 items-center justify-center rounded-lg text-[var(--color-text-secondary)] transition-all hover:bg-[var(--color-bg-secondary)] hover:text-[var(--color-text)]"
-        aria-label="Toggle theme"
-      >
-        {theme === "light" ? (
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-          </svg>
-        ) : (
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="5" />
-            <line x1="12" y1="1" x2="12" y2="3" />
-            <line x1="12" y1="21" x2="12" y2="23" />
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-            <line x1="1" y1="12" x2="3" y2="12" />
-            <line x1="21" y1="12" x2="23" y2="12" />
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-          </svg>
-        )}
-      </button>
+      {/* Language switcher */}
+      <div className="fixed top-4 right-4 z-50 flex gap-1 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] p-0.5">
+        {langs.map((l) => (
+          <button
+            key={l}
+            onClick={() => handleLangChange(l)}
+            className={`rounded-md px-2 py-1 font-mono text-[11px] transition-all ${
+              lang === l
+                ? "bg-[var(--color-text)] text-[var(--color-bg)]"
+                : "text-[var(--color-text-tertiary)] hover:text-[var(--color-text)]"
+            }`}
+          >
+            {langLabels[l]}
+          </button>
+        ))}
+      </div>
 
       {/* Content with transition */}
       <div className={`transition-all duration-300 ease-out ${fadeClass}`}>
-        {stage === "intro" && <IntroPage onStart={handleStart} />}
+        {stage === "intro" && <IntroPage t={t} onStart={handleStart} />}
         {stage === "test" && (
           <QuestionPage
-            question={questions[currentQ]}
+            question={localizedQuestions[currentQ]}
             current={currentQ}
-            total={questions.length}
+            total={localizedQuestions.length}
             selectedTags={selectedTags}
             onAnswer={handleAnswer}
           />
         )}
         {stage === "result" && resultType && (
           <ResultPage
-            result={resultProfiles[resultType]}
+            t={t}
+            result={localizedResults[resultType]}
             scores={scores}
             selectedTags={selectedTags}
             onRestart={handleRestart}
@@ -135,7 +160,7 @@ export default function App() {
       {/* Footer */}
       <footer className="border-t border-[var(--color-border)] px-6 py-6 text-center">
         <p className="mb-2 text-xs text-[var(--color-text-tertiary)]">
-          &copy; 2026 Alice Yu (JIATIAN YU). All rights reserved.
+          {t.copyright}
         </p>
         <div className="flex justify-center gap-4">
           <a href="https://lalalaoooyu.github.io/alice-intro/" target="_blank" rel="noreferrer" className="text-xs text-[var(--color-text-tertiary)] transition-colors hover:text-[var(--color-text)]">

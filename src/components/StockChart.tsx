@@ -27,8 +27,18 @@ export default function StockChart({ stocks, labels }: StockChartProps) {
       {/* Stock header */}
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--color-bg-secondary)] font-mono text-xs font-semibold text-[var(--color-text-secondary)]">
-            {isSingleStock ? "📊" : "📋"}
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--color-bg-secondary)]">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-tertiary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              {isSingleStock ? (
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+              ) : (
+                <>
+                  <line x1="18" y1="20" x2="18" y2="10" />
+                  <line x1="12" y1="20" x2="12" y2="4" />
+                  <line x1="6" y1="20" x2="6" y2="14" />
+                </>
+              )}
+            </svg>
           </div>
           <div>
             <div className="text-sm font-semibold text-[var(--color-text)]">

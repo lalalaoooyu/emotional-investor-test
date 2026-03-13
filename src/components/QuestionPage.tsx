@@ -22,8 +22,8 @@ export default function QuestionPage({ question, current, total, selectedTags, o
           <span className="font-mono text-xs tracking-wider text-[var(--color-text-tertiary)]">
             {String(current + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
           </span>
-          <span className="flex items-center gap-1.5 rounded-full bg-[var(--color-accent-light)] px-2.5 py-0.5 text-xs text-[var(--color-accent)]">
-            {question.emotionIcon} {question.emotion}
+          <span className="rounded-full bg-[var(--color-accent-light)] px-2.5 py-0.5 font-mono text-xs text-[var(--color-accent)]">
+            {question.emotion}
           </span>
         </div>
         <div className="mb-8 h-1 overflow-hidden rounded-full bg-[var(--color-bg-secondary)]">

@@ -1,6 +1,8 @@
 import type { ResultProfile } from "../data/results"
+import type { i18n } from "../data/i18n"
 
 interface ResultPageProps {
+  t: (typeof i18n)[keyof typeof i18n]
   result: ResultProfile
   scores: { anxious: number; avoidant: number; secure: number }
   selectedTags: string[]
@@ -31,7 +33,7 @@ function MetricBar({ label, value, color, delay }: { label: string; value: numbe
   )
 }
 
-export default function ResultPage({ result, scores, selectedTags, onRestart }: ResultPageProps) {
+export default function ResultPage({ t, result, scores, selectedTags, onRestart }: ResultPageProps) {
   return (
     <div className="min-h-screen px-6 py-12">
       <style>{`
@@ -44,7 +46,7 @@ export default function ResultPage({ result, scores, selectedTags, onRestart }: 
         {/* Header */}
         <div className="mb-8 text-center">
           <p className="mb-4 font-mono text-xs tracking-widest text-[var(--color-text-tertiary)]">
-            ANALYSIS COMPLETE
+            {t.analysisComplete}
           </p>
           <div
             className="mb-2 font-mono text-6xl font-bold"
@@ -52,7 +54,7 @@ export default function ResultPage({ result, scores, selectedTags, onRestart }: 
           >
             {result.grade}
           </div>
-          <p className="font-mono text-xs text-[var(--color-text-tertiary)]">情感投资评级</p>
+          <p className="font-mono text-xs text-[var(--color-text-tertiary)]">{t.ratingLabel}</p>
         </div>
 
         {/* Type card */}
@@ -61,13 +63,20 @@ export default function ResultPage({ result, scores, selectedTags, onRestart }: 
           style={{ borderColor: `${result.color}33`, background: `${result.color}08` }}
         >
           <div className="mb-3 flex items-center gap-3">
-            <span className="text-3xl">{result.icon}</span>
+            <div
+              className="flex h-10 w-10 items-center justify-center rounded-xl"
+              style={{ background: `${result.color}15` }}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={result.color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+              </svg>
+            </div>
             <div>
               <div className="text-lg font-bold" style={{ color: result.color }}>
                 {result.type}
               </div>
               <div className="font-mono text-xs text-[var(--color-text-tertiary)]">
-                风险等级: {result.riskLevel}
+                {t.riskLabel}: {result.riskLevel}
               </div>
             </div>
           </div>
@@ -79,7 +88,7 @@ export default function ResultPage({ result, scores, selectedTags, onRestart }: 
         {/* Detail */}
         <div className="mb-6">
           <h3 className="mb-2 text-xs font-medium uppercase tracking-wider text-[var(--color-text-tertiary)]">
-            诊断分析
+            {t.diagnosisTitle}
           </h3>
           <p className="text-sm leading-7 text-[var(--color-text-secondary)]">
             {result.detail}
@@ -89,12 +98,12 @@ export default function ResultPage({ result, scores, selectedTags, onRestart }: 
         {/* Metrics */}
         <div className="mb-6">
           <h3 className="mb-4 text-xs font-medium uppercase tracking-wider text-[var(--color-text-tertiary)]">
-            核心指标
+            {t.metricsTitle}
           </h3>
-          <MetricBar label="情绪稳定性" value={result.metrics.stability} color={result.color} delay={200} />
-          <MetricBar label="风控能力" value={result.metrics.riskControl} color={result.color} delay={400} />
-          <MetricBar label="情感收益率" value={result.metrics.returns} color={result.color} delay={600} />
-          <MetricBar label="独立性" value={result.metrics.independence} color={result.color} delay={800} />
+          <MetricBar label={t.metricStability} value={result.metrics.stability} color={result.color} delay={200} />
+          <MetricBar label={t.metricRisk} value={result.metrics.riskControl} color={result.color} delay={400} />
+          <MetricBar label={t.metricReturns} value={result.metrics.returns} color={result.color} delay={600} />
+          <MetricBar label={t.metricIndependence} value={result.metrics.independence} color={result.color} delay={800} />
         </div>
 
         {/* Advice */}
@@ -103,7 +112,7 @@ export default function ResultPage({ result, scores, selectedTags, onRestart }: 
           style={{ borderColor: result.color }}
         >
           <h3 className="mb-2 text-xs font-medium uppercase tracking-wider text-[var(--color-text-tertiary)]">
-            投资建议
+            {t.adviceTitle}
           </h3>
           <p className="text-sm leading-7 text-[var(--color-text-secondary)]">
             {result.advice}
@@ -113,7 +122,7 @@ export default function ResultPage({ result, scores, selectedTags, onRestart }: 
         {/* Tags */}
         <div className="mb-6">
           <h3 className="mb-3 text-xs font-medium uppercase tracking-wider text-[var(--color-text-tertiary)]">
-            你的交易记录
+            {t.tradeLogTitle}
           </h3>
           <div className="flex flex-wrap gap-2">
             {selectedTags.map((tag, i) => (
@@ -135,13 +144,13 @@ export default function ResultPage({ result, scores, selectedTags, onRestart }: 
         {/* Raw scores */}
         <div className="mb-8 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-secondary)] p-5">
           <h3 className="mb-4 text-xs font-medium uppercase tracking-wider text-[var(--color-text-tertiary)]">
-            原始数据
+            {t.rawDataTitle}
           </h3>
           <div className="flex justify-around">
             {[
-              { label: "冲动指数", val: scores.anxious, c: "#ef4444" },
-              { label: "回避指数", val: scores.avoidant, c: "#3b82f6" },
-              { label: "理性指数", val: scores.secure, c: "#22c55e" },
+              { label: t.impulsiveIndex, val: scores.anxious, c: "#ef4444" },
+              { label: t.avoidantIndex, val: scores.avoidant, c: "#3b82f6" },
+              { label: t.rationalIndex, val: scores.secure, c: "#22c55e" },
             ].map((s) => (
               <div key={s.label} className="text-center">
                 <div className="font-mono text-2xl font-bold" style={{ color: s.c }}>
@@ -161,7 +170,7 @@ export default function ResultPage({ result, scores, selectedTags, onRestart }: 
             onClick={onRestart}
             className="rounded-lg border border-[var(--color-border)] px-6 py-2.5 text-sm text-[var(--color-text-secondary)] transition-all hover:border-[var(--color-text)] hover:text-[var(--color-text)]"
           >
-            重新测试
+            {t.restartButton}
           </button>
         </div>
       </div>

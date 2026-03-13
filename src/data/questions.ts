@@ -13,7 +13,6 @@ export interface Option {
 export interface Question {
   id: number
   emotion: string
-  emotionIcon: string
   scenario: string
   hook: string
   stocks: StockLine[]
@@ -25,7 +24,6 @@ export const questions: Question[] = [
   {
     id: 1,
     emotion: "贪婪",
-    emotionIcon: "🤑",
     scenario: "你的股票连涨7天，累计+32%。朋友圈都在晒收益截图。",
     hook: "已经涨这么多了，卖掉是不是太可惜了？",
     stocks: [
@@ -42,7 +40,6 @@ export const questions: Question[] = [
   {
     id: 2,
     emotion: "恐惧",
-    emotionIcon: "😨",
     scenario: "今天开盘直接跳空低开，你的股票闪崩-12%。新闻标题：「分析师警告：下跌可能才刚开始」",
     hook: "再不跑，会不会血本无归？",
     stocks: [
@@ -59,7 +56,6 @@ export const questions: Question[] = [
   {
     id: 3,
     emotion: "焦虑",
-    emotionIcon: "😰",
     scenario: "你的股票横盘了整整3个月，纹丝不动。但大盘同期涨了18%。",
     hook: "是不是选错了？别人都在赚钱，就我在原地踏步。",
     stocks: [
@@ -77,7 +73,6 @@ export const questions: Question[] = [
   {
     id: 4,
     emotion: "FOMO",
-    emotionIcon: "🫣",
     scenario: "你之前差点买的那只股票，一周翻倍了。你的自选股涨了3%。群里都在讨论它。",
     hook: "当初怎么没买？！现在追还来得及吗？",
     stocks: [
@@ -95,7 +90,6 @@ export const questions: Question[] = [
   {
     id: 5,
     emotion: "恐惧+贪婪",
-    emotionIcon: "🎰",
     scenario: "你的股票经历了一波-25%的暴跌后，今天突然反弹+8%。但你不确定这是真正的反转，还是「死猫跳」。",
     hook: "抄底的机会？还是下一个陷阱？",
     stocks: [
@@ -112,7 +106,6 @@ export const questions: Question[] = [
   {
     id: 6,
     emotion: "焦虑",
-    emotionIcon: "😵‍💫",
     scenario: "你的组合里三只股票：A涨了+20%，B跌了-15%，C原地不动。",
     hook: "要不要把BC的钱全部转给A？赢家通吃？",
     stocks: [
@@ -131,7 +124,6 @@ export const questions: Question[] = [
   {
     id: 7,
     emotion: "贪婪",
-    emotionIcon: "🚀",
     scenario: "你的股票刚创下历史新高！成交量也放大了。有分析师喊出目标价翻倍。",
     hook: "不加仓是不是傻？万一真翻倍了呢？",
     stocks: [
@@ -148,7 +140,6 @@ export const questions: Question[] = [
   {
     id: 8,
     emotion: "恐惧",
-    emotionIcon: "💀",
     scenario: "黑色星期一。整个市场暴跌，你的组合一天亏了-8%。社交媒体一片哀嚎。",
     hook: "这是系统性风险吗？会不会更惨？",
     stocks: [
@@ -167,7 +158,6 @@ export const questions: Question[] = [
   {
     id: 9,
     emotion: "焦虑",
-    emotionIcon: "🎢",
     scenario: "你的股票这周坐了过山车：周一+10%，周二-8%，周三+6%，周四-5%，今天又涨了4%。",
     hook: "到底该什么时候出手？每天心态都在崩。",
     stocks: [
@@ -184,7 +174,6 @@ export const questions: Question[] = [
   {
     id: 10,
     emotion: "FOMO+恐惧",
-    emotionIcon: "🧠",
     scenario: "市场已经连续下跌了3个月，大盘跌了-30%。你手里还有一笔闲钱。所有人都在喊「抄底」。",
     hook: "别人都在抄底，我不进场是不是错过了一辈子一次的机会？",
     stocks: [
