@@ -34,7 +34,7 @@ interface I18nStrings {
 
 export const i18n: Record<Lang, I18nStrings> = {
   zh: {
-    title: "情感投资者测试",
+    title: "Market Mind",
     subtitle: "10 道真实行情场景",
     description: "面对暴涨、闪崩、横盘、FOMO……\n你的本能反应，暴露了你的投资人格。",
     tags: ["贪婪", "恐惧", "焦虑", "FOMO"],
@@ -59,7 +59,7 @@ export const i18n: Record<Lang, I18nStrings> = {
     copyright: "\u00A9 2026 Alice Yu (JIATIAN YU). All rights reserved.",
   },
   en: {
-    title: "Emotional Investor Test",
+    title: "Market Mind",
     subtitle: "10 Real Market Scenarios",
     description: "Facing surges, crashes, stagnation, FOMO...\nYour instincts reveal your investor personality.",
     tags: ["Greed", "Fear", "Anxiety", "FOMO"],
@@ -84,7 +84,7 @@ export const i18n: Record<Lang, I18nStrings> = {
     copyright: "\u00A9 2026 Alice Yu (JIATIAN YU). All rights reserved.",
   },
   ja: {
-    title: "感情投資家テスト",
+    title: "Market Mind",
     subtitle: "10の実際の相場シナリオ",
     description: "暴騰、暴落、横ばい、FOMO...\nあなたの本能的な反応が投資家タイプを明かす。",
     tags: ["貪欲", "恐怖", "不安", "FOMO"],

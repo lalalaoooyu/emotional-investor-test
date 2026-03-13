@@ -42,7 +42,7 @@ export default function StockChart({ stocks, labels }: StockChartProps) {
           </div>
           <div>
             <div className="text-sm font-semibold text-[var(--color-text)]">
-              {isSingleStock ? stock.name : "投资组合"}
+              {isSingleStock ? stock.name : "PORTFOLIO"}
             </div>
             {isSingleStock && (
               <div className="flex items-center gap-2 font-mono text-xs">

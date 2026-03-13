@@ -113,7 +113,7 @@ export default function App() {
     })
   }
 
-  const langs: Lang[] = ["zh", "en", "ja"]
+  const langs: Lang[] = ["ja", "zh", "en"]
 
   return (
     <div className="relative min-h-screen">
